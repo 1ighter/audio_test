@@ -152,9 +152,9 @@ def test():
     a = time.time()
     WebsocketReq1 = WebsocketReq(
         appid='appid',
-        apisecret='ea49d6aca557c416e7e2fd8f66ac98b6',
-        apikey='e0b76912f87ee883e5be737b6d83681b',
-        audio_file=r'D:\audio\tencent_soe_process\word_test.wav',
+        apisecret='apisecret',
+        apikey='apikey',
+        audio_file=r'D:\audio.wav',
         text='bussiness',
         category='read_sentence',
         ent='en_vip')
