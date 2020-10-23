@@ -1,2 +1,2 @@
 # audio_test
-科大讯飞语音流式评测python demo
+科大讯飞流式语音测评 python demo
