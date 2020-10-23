@@ -12,7 +12,7 @@ from urllib.parse import urlencode
 from wsgiref.handlers import format_date_time
 
 import websocket
-
+import xmltodict
 
 
 class WebsocketReq(object):
@@ -97,8 +97,22 @@ class WebsocketReq(object):
             #print('请求成功')
             #print('原始的xml结果:')
             data = base64.b64decode(json.loads(message)['data']['data'])
-            print(data.decode('utf-8'))
-            self.result['data'] = data
+            data = data.decode('utf-8')
+            dic = xmltodict.parse(data)
+            dic = json.dumps(dic, indent=4)
+            dic2 = json.loads(dic)
+
+            f = open("daneil.txt","w")
+            f.write(dic)
+            f.close()
+            self.result['句子精准度'] = data['xml_result']['read_sentence']['rec_paper']['read_chapter']['@accuracy_score']
+            self.result['句子内容'] = data['xml_result']['read_sentence']['rec_paper']['read_chapter']['@content']
+            self.result['句子流畅度'] = data['xml_result']['read_sentence']['rec_paper']['read_chapter']['fluency_score']
+            self.result['句子标准度'] = data['xml_result']['read_sentence']['rec_paper']['read_chapter']['@standard_score']
+            self.result['句子完整度'] = data['xml_result']['read_sentence']['rec_paper']['read_chapter']['@integrity_score']
+            self.result['句子总得分'] = data['xml_result']['read_sentence']['rec_paper']['read_chapter']['@total_score']
+            self.result['单词'] = data['xml_result']['read_sentence']['rec_paper']['read_chapter']['word']
+            print(self.result['单词'])
             time.sleep(1)
             self.ws.close()
             #print("thread terminating...")
@@ -148,18 +162,18 @@ class WebsocketReq(object):
         # ret = websocket_instance.pop(ws)
         # return ret
 
-def test():
-    a = time.time()
+def test1():
+
     WebsocketReq1 = WebsocketReq(
-        appid='appid',
+        appid='5f20ecf1',
         apisecret='ea49d6aca557c416e7e2fd8f66ac98b6',
         apikey='e0b76912f87ee883e5be737b6d83681b',
-        audio_file=r'D:\audio\tencent_soe_process\word_test.wav',
-        text='bussiness',
+        audio_file=r'D:\xf\学生语音测试音频\01 Week 1 Lesson 1 Speaking - Daniel Vocabulary.wav',
+        text='good morning,good night,good afternoon,good evening,name,fine',
         category='read_sentence',
         ent='en_vip')
     websocket.enableTrace(False)
     data = WebsocketReq1.upload()
     print(data)
 
-test()
+test1()
